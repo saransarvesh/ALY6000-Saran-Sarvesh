@@ -42,8 +42,10 @@ str(icSales)
 summary(icSales)
 
 #data import
-read.csv("C:\\Users\\saran sarevsh\\Desktop\\Student.csv", header= TRUE, sep=",")
+install.packages("readr")
+library(readr)
+Student<-read.csv("C:\\'Users\\saran sarevsh\\Desktop\\Student.csv", header= TRUE, sep=",")
+Student
 
 #diplaying variables
-Student <-read.csv("C:\\Users\\saran sarevsh\\Desktop\\Student.csv", header= TRUE, sep=",")
 names(Student)
