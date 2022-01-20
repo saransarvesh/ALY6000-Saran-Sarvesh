@@ -44,7 +44,7 @@ summary(icSales)
 #data import
 install.packages("readr")
 library(readr)
-Student<-read.csv("C:\\'Users\\saran sarevsh\\Desktop\\Student.csv", header= TRUE, sep=",")
+Student<-read.csv("C:/Users/saran sarevsh/Downloads/Student.csv", header=TRUE, sep="," )
 Student
 
 #diplaying variables
