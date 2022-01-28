@@ -1,0 +1,94 @@
+#print name
+print("Plotting Basics:Nalliah")
+
+#installing packages&importing libraries
+install.packages("ggplot2")
+install.packages("plotrix")
+install.packages("dplyr")
+install.packages("FSA")
+install.packages("FSAdata")
+install.packages("magrittr")
+install.packages("moments")
+
+library(ggplot2)
+library(plotrix)
+library(dplyr)
+library(FSA)
+library(FSAdata)
+library(magrittr)
+library(moments)
+
+#loading dataset
+BullTroutRML2
+
+#first and last three records
+new.data<-data.frame(rbind(head(BullTroutRML2,3),tail(BullTroutRML2,3)))
+print(new.data)
+
+#removinf records except Harisson alke
+new<-filterD(BullTroutRML2,BullTroutRML2$lake=="Harrison")
+new
+
+#first and last 5 records of previous data set
+new1<-data.frame(rbind(head(new,5),tail(new,5)))
+new1
+
+#structure of harrison data set
+str(new)
+
+#summary of harrison data set
+summary(new)
+
+#scatter plot
+plot(new$fl,new$age,main="Plot 1: Harrison Lake Trout",xlab = "Age(yrs)",ylab="Fork Length(mm)",xlim =c(0,500),ylim=c(0,15),pch=19,col="red")
+
+#histogram
+hist(new$age,main="Plot 2: Harrison Fish Age Distribution",xlab = "Age(yrs",ylab = "Frequency",xlim = c(0,15),ylim = c(0,15),col = "cadetblue",col.main="cadetblue")
+
+#overdense plot
+p <- ggplot(new, aes(x=new$fl,y=new$age)) + geom_point(size=3,alpha =0.4, color="green")
+p + labs(x= "fork length(mm)" , y="age (years) ", title="“Plot 3: Harrison Density Shaded by Era”") + xlim(0,500) + ylim(0,15)
+
+#new object tmp
+tmp <- data.frame(rbind(head(BullTroutRML2,3),tail(BullTroutRML2,3)))
+tmp
+
+#diplaying era variable in tmp
+tmp %>% select(era)
+
+#pch vector
+pch<-c("+","x")
+pch
+
+#cols vector
+cols<-c("red","gray60")
+cols
+
+#era values to numeric
+tmp$era<-as.numeric(tmp$era)
+tmp$era
+
+#cols vector with temp$era values
+cols<-tmp$era
+cols
+
+#plot4
+plot(tmp$fl, tmp$age, main="Plot 4: Symbol & Color by Era",
+     xlim=c(0,500), ylim=c(0,15), ylab="Age (yrs)", xlab="Fork Length (mm)",
+     pch=pch,col= cols)
+
+#plot5
+plot(tmp$fl, tmp$age, main="Plot 5: Regression Overlay",
+     xlim=c(0,500), ylim=c(0,15), ylab="Age (yrs)", xlab="Fork Length (mm)",
+     pch= pch,
+     col= cols)
+abline(lm(tmp$age~tmp$fl), col="orange", main= "Plot 5: Regression Overlay")
+
+#plot6
+plot(tmp$fl, tmp$age, main="Plot 6: Legend Overlay",
+     xlim=c(0,500), ylim=c(0,15), ylab="Age (yrs)", xlab="Fork Length (mm)",
+     pch= pch,
+     col= cols)
+abline(lm(tmp$age~tmp$fl), col="orange", main= "Plot 6: Legend Overlay")
+legend("topleft",legend=c("Grey=1977-80","Red=1997-01"),inset=0.0025,cex=1,title = "Years",bg="pink",box.col="green",col = cols)
+
