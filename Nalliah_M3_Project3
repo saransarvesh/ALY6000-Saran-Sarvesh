@@ -1,0 +1,116 @@
+#1.Print name& load libraries
+print("Saran Sarvesh Nalliah")
+install.packages(c("FSA", "FSAdata", "magrittr",  
+                   "dplyr", "tidyr", "tidyverse"))
+
+library(FSA)
+library(FSAdata)
+library(magrittr)
+library(dplyr)
+library(tidyr)
+library(tidyverse)
+
+#2.Import .csv file
+bio<-read.csv("C:/Users/saran sarevsh/Downloads/inchBio.csv",header = TRUE,sep = ",")
+bio
+
+#3.Head, Tail and Structure
+head(bio)
+tail(bio)
+str(bio)
+
+#4.Ocject creation 
+counts<-bio %>% select(species)
+counts
+
+#5.Levels of names
+unique(bio$species)
+
+#6.Object with anmes and numbers
+tmp<-bio %>% count(species)
+tmp
+
+#7.Creating a subset
+tmp2<-subset.data.frame(bio,select = "species")
+tmp2
+head(tmp2,5)
+
+#8.Table and its class
+w<-table(bio$species)
+w
+class(w)
+
+#9.Data frame creation
+t<-data.frame(w)
+t
+
+#10.Freq values of t
+t %>% select(Freq)
+
+#11.table cSpec
+cSpec<-table(bio$species)
+cSpec
+
+#12.Table cSpecPct
+cSpecPct<-prop.table(cSpec)*100
+cSpecPct
+class(cSpecPct)
+
+#13.Table to data frame
+u<-data.frame(cSpecPct)
+u
+class(u)
+
+#14.Barplot cSpec
+barplot(cSpec,mainn="Fish Count", ylab="COUNTS",cex.names = 0.5,las=1, cex.axis=0.6,horiz = FALSE, col ="light green")
+
+#15.Barplot cSpecPct
+barplot(cSpecPct,main="Fish Relative Frequency",ylim = c(0,40),horiz=FALSE,cex.names =0.5,ylab="Frequency",las=2,col.lab="light blue")
+
+#16.ordering
+d<-u[order(u$Freq,decreasing = TRUE),]
+d
+
+#17.Renaming d
+d %>% rename(Species=Var1,RelFreq=Freq)
+
+#18.Adding new varibales
+tmp<-bio %>% count(species)
+tmp
+tmp<-subset(tmp,select=-species)
+tmp
+tmp<-tmp[order(tmp$n,decreasing=TRUE),]
+tmp
+d<-u[order(u$Freq,decreasing = TRUE),]
+d<-arrange(d,desc(d$Freq)) %>%
+     mutate(counts=tmp,cumcount = cumsum(counts),
+                freq=round(d$Freq/sum(d$Freq),3),
+               cumfreq=cumsum(freq))
+d
+d<-subset(d,select=-freq)
+d
+
+#19.parameter variable
+def_par <- par() 
+def_par
+
+#20.Pareto Plot
+pc<-barplot(d$counts,  
+             width = 1, space = 1.5, border = NA, axes = F,
+             ylim = c(0, 3.05 * max(d$counts, na.rm = T)), 
+             ylab = "Cummulative Counts" ,  
+             names.arg = d$Species,
+             main = "Species Pareto",las=2)
+
+#21.Adding cummulative line
+lines(pc, d$cumcount, type = "b", cex = 0.7, pch = 19, col="cyan4")
+
+#22.Grey Box
+box(col = "grey62")
+
+#23.Adding left side axis
+axis(side = 2, at = c(0, d$cumcount), las = 1, col.axis = "grey62", col = "grey62", cex.axis = 0.8)
+
+#24.Adding right side of box
+axis(side = 4, at = c(0, d$cumcount), labels = paste(c(0, round(d$cumfreq * 100)) ,"%",sep=""), 
+     las = 1, col.axis = "cyan3", col.lab = "cyan4", cex.axis = 0.8)
