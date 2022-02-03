@@ -99,7 +99,7 @@ pc<-barplot(d$counts,
              width = 1, space = 1.5, border = NA, axes = F,
              ylim = c(0, 3.05 * max(d$counts, na.rm = T)), 
              ylab = "Cummulative Counts" ,  
-             names.arg = d$Species,
+             names.arg = d$Var1,
              main = "Species Pareto",las=2)
 
 #21.Adding cummulative line
