@@ -1,0 +1,95 @@
+install.packages("ggplot2")
+install.packages("dplyr")
+install.packages("writexl")
+install.packages("readxl")
+install.packages("tidyverse")
+library(ggplot2)
+library(dplyr)
+library(writexl)
+library(readxl)
+library(tidyverse)
+
+diamonds
+dim(diamonds)
+
+
+
+Diamonds<-diamonds[1:700,]
+Diamonds
+dim(Diamonds)
+str(Diamonds)
+summary(Diamonds)
+unique(Diamonds$clarity)
+
+
+Diamonds <- Diamonds %>%
+  filter(clarity != "I1" & clarity !="IF")
+Diamonds
+
+str(Diamonds)
+summary(Diamonds)
+
+l<-ggplot(Diamonds, aes(x=price)) + 
+  geom_histogram(color="black", fill="green")
+l
+
+m<-ggplot(Diamonds, aes(x=carat)) + 
+  geom_histogram(color="darkblue", fill="lightblue")
+m
+
+ggplot(data = Diamonds) +
+  geom_bar(mapping = aes(x = clarity))
+
+
+q<-qplot(x=price, y=carat, color=clarity,xlim=c(0,3000),ylim = c(0,1.25), data=Diamonds) +
+  ggtitle("Scatterplot of Price and Carat, by clarity")
+q
+
+b <- ggplot(Diamonds, aes(x=price, y=carat)) + 
+  geom_boxplot() + 
+  ggtitle("Boxplot of Price")
+b
+
+boxplot.stats(Diamonds$carat)$out
+
+out <- boxplot.stats(Diamonds$carat)$out
+out_rm <- which(Diamonds$carat%in% c(out))
+out_rm
+
+boxplot(Diamonds$carat,
+        main = "Boxplot of price vs carat")
+mtext(paste("Outliers: ", paste(out, collapse = ", ")))
+
+Diamonds4 <- Diamonds[-c(out_rm), ]
+Diamonds4
+summary(Diamonds4)
+
+r<-qplot(x=price, y=carat,xlim=c(0,3000),ylim = c(0,1.25), color=clarity, data=Diamonds4) +
+  ggtitle("Scatterplot of Price and Carat, by clarity-outliers")
+r
+ggplot(data = Diamonds4) +
+  geom_bar(mapping = aes(x = clarity))
+
+
+#Finding difference in depth to Diamonds 4
+
+write_xlsx(Diamonds4, "C:\\Users\\saran sarevsh\\Desktop\\Diamonds4.xlsx")
+
+Diamonds5=read_excel('Diamondsspecial.xlsx')
+Diamonds5
+dim(Diamonds5)
+
+q<-ggplot(Diamonds5,aes(x=price,y=carat, col=sales))+geom_point()
+q
+
+t<-ggplot(Diamonds5,aes(x=clarity,y=sales, col=cut))+geom_point()
+t
+
+
+new5<-  ggplot(Diamonds5,aes(x=cut,y=sales, col=price)) +
+  geom_boxplot()+ggtitle("Boxplot-cut versus sales")
+new5  
+
+
+summary(Diamonds5$sales)
+summary(Diamonds5$'diff-sales')
